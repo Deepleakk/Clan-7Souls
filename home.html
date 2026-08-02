@@ -4,58 +4,79 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>7Souls | Home</title>
-<link rel="icon" href="./assets/deltarune-save.png">
+<link rel="icon" href="./assets/favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg-start: #0e0c14;
-    --bg-end: #0b1730;
     --soul-red: #ff3b5c;
+    --dt-navy: #0b1730;
     --dt-cyan: #5ee0e0;
-    --text: #e8e4f0;
-    --text-dim: #8f8aa3;
-    --border: #2c2738;
+    --text: #eee9f7;
+    --text-dim: #a79fc2;
+    --border: rgba(255,255,255,0.08);
+    --nav-bg: rgba(10,9,16,0.55);
   }
   *{margin:0;padding:0;box-sizing:border-box;}
   html{scroll-behavior:smooth;}
   body{
     font-family:'Space Grotesk',sans-serif;
     color:var(--text);
-    background:var(--bg-start);
-    transition:background-color .6s ease;
+    background: radial-gradient(ellipse at 20% 20%, rgba(255,59,92,0.22), transparent 55%),
+                radial-gradient(ellipse at 80% 30%, rgba(94,224,224,0.10), transparent 50%),
+                radial-gradient(ellipse at 50% 90%, rgba(20,30,90,0.35), transparent 60%),
+                var(--dt-navy);
     min-height:100vh;
     overflow-x:hidden;
+    position:relative;
   }
-  body.scrolled{background:var(--bg-end);}
   .mono{font-family:'JetBrains Mono',monospace;}
 
-  /* twinkling stars */
+  /* nebula + stars bg, same as join.html */
+  .bg-layer{ position:fixed;inset:0;z-index:0;pointer-events:none; }
   .stars{
-    position:fixed;inset:0;z-index:0;pointer-events:none;
+    position:absolute;inset:0;
     background-image:
-      radial-gradient(1.5px 1.5px at 15% 20%, rgba(255,255,255,.6), transparent),
-      radial-gradient(1.5px 1.5px at 35% 65%, rgba(255,255,255,.4), transparent),
-      radial-gradient(2px 2px at 60% 30%, rgba(94,224,224,.5), transparent),
-      radial-gradient(1.5px 1.5px at 80% 75%, rgba(255,255,255,.45), transparent),
-      radial-gradient(1.5px 1.5px at 90% 15%, rgba(255,59,92,.4), transparent),
-      radial-gradient(1.5px 1.5px at 25% 90%, rgba(255,255,255,.35), transparent),
-      radial-gradient(1.5px 1.5px at 50% 50%, rgba(255,255,255,.3), transparent);
-    background-size: 100% 100%;
-    animation: twinkle 4s ease-in-out infinite alternate;
+      radial-gradient(1.5px 1.5px at 10% 20%, rgba(255,255,255,.65), transparent),
+      radial-gradient(1.5px 1.5px at 25% 70%, rgba(255,255,255,.45), transparent),
+      radial-gradient(2px 2px at 40% 35%, rgba(94,224,224,.55), transparent),
+      radial-gradient(1.5px 1.5px at 60% 80%, rgba(255,255,255,.5), transparent),
+      radial-gradient(1.5px 1.5px at 75% 25%, rgba(255,59,92,.5), transparent),
+      radial-gradient(1.5px 1.5px at 88% 60%, rgba(255,255,255,.4), transparent),
+      radial-gradient(1.5px 1.5px at 50% 10%, rgba(255,255,255,.35), transparent),
+      radial-gradient(1.5px 1.5px at 15% 90%, rgba(255,255,255,.35), transparent),
+      radial-gradient(1.5px 1.5px at 30% 45%, rgba(255,255,255,.3), transparent),
+      radial-gradient(1.5px 1.5px at 68% 92%, rgba(94,224,224,.35), transparent);
+    animation: twinkle 4.5s ease-in-out infinite alternate;
   }
   @keyframes twinkle{
-    from{opacity:.55;}
+    from{opacity:.5;}
     to{opacity:1;}
+  }
+  .nebula{
+    position:absolute;inset:0;
+    background:
+      radial-gradient(ellipse 40% 30% at 30% 40%, rgba(255,59,92,0.12), transparent 70%),
+      radial-gradient(ellipse 35% 25% at 70% 60%, rgba(94,224,224,0.08), transparent 70%);
+    animation: drift-neb 18s ease-in-out infinite alternate;
+  }
+  @keyframes drift-neb{
+    from{transform:translate(0,0) scale(1);}
+    to{transform:translate(-3%,2%) scale(1.05);}
   }
 
   nav{
     position:sticky;top:0;z-index:10;
     display:flex;align-items:center;justify-content:space-between;
     padding:20px 6vw;
-    background:rgba(10,9,16,0.55);
+    background:var(--nav-bg);
     backdrop-filter:blur(10px);
     border-bottom:1px solid var(--border);
+    transition:background-color .6s ease, border-color .6s ease;
+  }
+  nav.scrolled{
+    background:rgba(11,23,48,0.65);
+    border-color:rgba(94,224,224,0.15);
   }
   nav .logo{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:600;}
   nav .logo img{width:28px;height:28px;object-fit:cover;border-radius:4px;}
@@ -84,10 +105,14 @@
     width:52px;height:52px;object-fit:cover;margin-bottom:24px;
     filter:drop-shadow(0 0 14px rgba(255,215,120,0.5));
     opacity:0;
-    animation:rise .8s ease forwards 0s;
+    animation:rise .8s ease forwards 0s, spin 8s linear infinite 0.8s;
   }
   @keyframes rise{
     to{opacity:1;transform:translateY(0);}
+  }
+  @keyframes spin{
+    from{transform:rotate(0deg);}
+    to{transform:rotate(360deg);}
   }
 
   .hero .actions{
@@ -113,21 +138,69 @@
     white-space:nowrap;
     text-align:center;
     opacity:0;animation:rise .8s ease forwards .75s;
+    transition:opacity .3s ease;
+    z-index:5;
+  }
+  .scroll-hint.hide{
+    opacity:0 !important;
+    pointer-events:none;
   }
   .scroll-hint .chevron{
     width:8px;height:8px;border-right:2px solid var(--text-dim);border-bottom:2px solid var(--text-dim);
     transform:rotate(45deg);
   }
 
+  /* content sections */
+  section.content{
+    padding:90px 6vw;
+    position:relative;
+  }
+  .section-head{max-width:640px;margin:0 auto 48px;text-align:center;}
+  .section-head .eyebrow{font-size:12px;color:var(--dt-cyan);letter-spacing:2px;margin-bottom:12px;}
+  .section-head h2{font-size:clamp(22px,3.5vw,32px);font-weight:700;}
+
+  .about-box{
+    max-width:700px;margin:0 auto;text-align:center;
+    color:var(--text-dim);font-size:15.5px;line-height:1.85;
+  }
+  .about-box strong{color:var(--text);}
+
+  .souls-grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:18px;max-width:1000px;margin:0 auto;
+  }
+  .soul-card{
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    background: linear-gradient(160deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 14px;
+    padding:24px 22px;
+    transition:transform .2s ease, border-color .2s ease;
+  }
+  .soul-card:hover{transform:translateY(-3px);border-color:rgba(255,255,255,0.22);}
+  .soul-card .emoji{font-size:22px;margin-bottom:10px;}
+  .soul-card h3{font-size:15.5px;font-weight:600;margin-bottom:8px;}
+  .soul-card p{color:var(--text-dim);font-size:13.5px;line-height:1.65;}
+
+  footer.page-footer{
+    padding:32px 6vw;text-align:center;color:var(--text-dim);font-size:13px;
+    border-top:1px solid var(--border);position:relative;z-index:1;
+  }
+
   @media(max-width:640px){
     .hero{padding:50px 8vw;}
+    section.content{padding:64px 6vw;}
   }
 </style>
 </head>
 <body>
-<div class="stars"></div>
+<div class="bg-layer">
+  <div class="stars"></div>
+  <div class="nebula"></div>
+</div>
 
-<nav>
+<nav id="navbar">
   <div class="logo">
     <img src="./assets/deltarune-save.png" alt="7Souls">
     <span><span class="n">7</span>Souls</span>
@@ -150,14 +223,74 @@
       <span class="chevron"></span>
     </div>
   </section>
+
+  <section class="content" id="about">
+    <div class="section-head">
+      <div class="eyebrow mono">// welcome</div>
+      <h2>Welcome To Clan 𝟽𝚂𝚘𝚞𝚕𝚜</h2>
+    </div>
+    <div class="about-box">
+      <p><strong>𝟽𝚂𝚘𝚞𝚕𝚜</strong> Adalah Clan Bertema 7 Jiwa Dari Game Undertale Dan Deltarune, Clan Iseng Ini Dibuat Untuk Kalian Yang Mau Masuk Aja.</p>
+    </div>
+  </section>
+
+  <section class="content" id="souls">
+    <div class="section-head">
+      <div class="eyebrow mono">// every soul meaning</div>
+      <h2>Makna Setiap Jiwa</h2>
+    </div>
+    <div class="souls-grid">
+      <div class="soul-card">
+        <div class="emoji">🩵</div>
+        <h3>Patience</h3>
+        <p>Understanding that great things take time, mastering the art of staying calm in a rushing world, and trusting that waiting for the right moment is just as powerful as taking action.</p>
+      </div>
+      <div class="soul-card">
+        <div class="emoji">🧡</div>
+        <h3>Bravery</h3>
+        <p>Facing life's uncertainties head-on, stepping out of your comfort zone, and choosing to move forward even when fear tries to hold you back.</p>
+      </div>
+      <div class="soul-card">
+        <div class="emoji">💙</div>
+        <h3>Integrity</h3>
+        <p>Staying true to your core values and morals, remaining honest with yourself and others, and standing firm no matter how much the world tries to pressure you.</p>
+      </div>
+      <div class="soul-card">
+        <div class="emoji">💜</div>
+        <h3>Perseverance</h3>
+        <p>Having the unyielding grit to keep pushing through life's toughest chapters, never giving up when doors close, and quietly outlasting every hardship.</p>
+      </div>
+      <div class="soul-card">
+        <div class="emoji">💚</div>
+        <h3>Kindness</h3>
+        <p>Choosing empathy as a strength, offering genuine care to those around you, and building a warmer world through daily acts of compassion.</p>
+      </div>
+      <div class="soul-card">
+        <div class="emoji">💛</div>
+        <h3>Justice</h3>
+        <p>Standing up for what is right with absolute clarity, defending fairness in everyday life, and keeping an unwavering focus on truth.</p>
+      </div>
+      <div class="soul-card">
+        <div class="emoji">❤️</div>
+        <h3>Determination</h3>
+        <p>The ultimate driving force of the soul, the unshakeable will to chase your dreams, and the power to rise up stronger every time life knocks you down.</p>
+      </div>
+    </div>
+  </section>
 </main>
 
+<footer class="page-footer mono">𝟽𝚂𝚘𝚞𝚕𝚜</footer>
+
 <script>
+  const nav = document.getElementById('navbar');
+  const scrollHint = document.querySelector('.scroll-hint');
   window.addEventListener('scroll', () => {
     if (window.scrollY > 40) {
-      document.body.classList.add('scrolled');
+      nav.classList.add('scrolled');
+      scrollHint.classList.add('hide');
     } else {
-      document.body.classList.remove('scrolled');
+      nav.classList.remove('scrolled');
+      scrollHint.classList.remove('hide');
     }
   });
 </script>
