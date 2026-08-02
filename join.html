@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>7Souls | Join</title>
+<link rel="icon" href="./assets/deltarune-save.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --soul-red: #ff3b5c;
+    --dt-navy: #0b1730;
+    --dt-cyan: #5ee0e0;
+    --text: #eee9f7;
+    --text-dim: #a79fc2;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;overflow:hidden;}
+  body{
+    font-family:'Space Grotesk',sans-serif;
+    color:var(--text);
+    background: radial-gradient(ellipse at 20% 20%, rgba(255,59,92,0.22), transparent 55%),
+                radial-gradient(ellipse at 80% 30%, rgba(94,224,224,0.10), transparent 50%),
+                radial-gradient(ellipse at 50% 90%, rgba(20,30,90,0.35), transparent 60%),
+                var(--dt-navy);
+    display:flex;align-items:center;justify-content:center;
+    padding:5vh 5vw;
+    position:relative;
+  }
+  .mono{font-family:'JetBrains Mono',monospace;}
+
+  /* nebula + stars bg */
+  .bg-layer{
+    position:fixed;inset:0;z-index:0;pointer-events:none;
+  }
+  .stars{
+    position:absolute;inset:0;
+    background-image:
+      radial-gradient(1.5px 1.5px at 10% 20%, rgba(255,255,255,.65), transparent),
+      radial-gradient(1.5px 1.5px at 25% 70%, rgba(255,255,255,.45), transparent),
+      radial-gradient(2px 2px at 40% 35%, rgba(94,224,224,.55), transparent),
+      radial-gradient(1.5px 1.5px at 60% 80%, rgba(255,255,255,.5), transparent),
+      radial-gradient(1.5px 1.5px at 75% 25%, rgba(255,59,92,.5), transparent),
+      radial-gradient(1.5px 1.5px at 88% 60%, rgba(255,255,255,.4), transparent),
+      radial-gradient(1.5px 1.5px at 50% 10%, rgba(255,255,255,.35), transparent),
+      radial-gradient(1.5px 1.5px at 15% 90%, rgba(255,255,255,.35), transparent);
+    animation: twinkle 4.5s ease-in-out infinite alternate;
+  }
+  @keyframes twinkle{
+    from{opacity:.5;}
+    to{opacity:1;}
+  }
+  .nebula{
+    position:absolute;inset:0;
+    background:
+      radial-gradient(ellipse 40% 30% at 30% 40%, rgba(255,59,92,0.12), transparent 70%),
+      radial-gradient(ellipse 35% 25% at 70% 60%, rgba(94,224,224,0.08), transparent 70%);
+    animation: drift-neb 18s ease-in-out infinite alternate;
+  }
+  @keyframes drift-neb{
+    from{transform:translate(0,0) scale(1);}
+    to{transform:translate(-3%,2%) scale(1.05);}
+  }
+
+  .stage{
+    position:relative;z-index:1;
+    width:100%;max-width:420px;
+    perspective:1200px;
+  }
+
+  .glass-card{
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    background: linear-gradient(160deg, rgba(255,255,255,0.10), rgba(255,255,255,0.03));
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 20px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.12);
+    padding: 42px 32px;
+    text-align:center;
+    transition: opacity .4s ease, transform .4s ease;
+  }
+
+  #cardJoin img.logo{
+    width:56px;height:56px;object-fit:cover;border-radius:50%;
+    margin:0 auto 20px;
+    box-shadow:0 0 20px rgba(255,59,92,0.4);
+  }
+  #cardJoin h1{
+    font-size:clamp(19px,4vw,23px);font-weight:700;line-height:1.4;margin-bottom:12px;
+  }
+  #cardJoin p{
+    color:var(--text-dim);font-size:14.5px;line-height:1.6;margin-bottom:28px;
+  }
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    width:100%;padding:14px 20px;border-radius:10px;
+    font-weight:600;font-size:14.5px;text-decoration:none;
+    background:var(--soul-red);color:#fff;border:none;cursor:pointer;
+    transition:transform .18s ease, box-shadow .18s ease;
+  }
+  .btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,59,92,0.35);}
+  .btn:active{transform:translateY(0);}
+  .btn.wa{background:#25D366;}
+  .btn.wa:hover{box-shadow:0 8px 24px rgba(37,211,102,0.35);}
+
+  /* rules card */
+  #cardRules{
+    display:none;
+    text-align:left;
+    max-height:82vh;
+    overflow-y:auto;
+  }
+  #cardRules h1{
+    font-size:clamp(18px,4vw,21px);font-weight:700;margin-bottom:16px;text-align:center;
+  }
+  #cardRules pre{
+    white-space:pre-wrap;
+    font-family:'JetBrains Mono',monospace;
+    font-size:12.5px;line-height:1.85;
+    color:var(--text-dim);
+    background:rgba(0,0,0,0.18);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:12px;
+    padding:16px 16px;
+    margin-bottom:24px;
+  }
+  #cardRules pre .hl{color:var(--dt-cyan);font-weight:600;}
+
+  .footer-fixed{
+    position:fixed;bottom:18px;left:0;right:0;z-index:1;
+    text-align:center;font-size:13px;color:var(--text-dim);
+    letter-spacing:2px;
+  }
+
+  /* fade transition between cards */
+  .fade-out{opacity:0;transform:scale(.97);pointer-events:none;}
+
+  @media(max-width:480px){
+    .glass-card{padding:34px 22px;border-radius:16px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-layer">
+  <div class="stars"></div>
+  <div class="nebula"></div>
+</div>
+
+<div class="stage">
+  <div class="glass-card" id="cardJoin">
+    <img class="logo" src="./assets/red-soul.jpg" alt="7Souls">
+    <h1>Ready To Join The 𝟽𝚂𝚘𝚞𝚕𝚜 Clan?</h1>
+    <p>Kami Bersedia Menerima Anda Di Clan Kami!</p>
+    <button class="btn" id="btnShowRules">Link WhatsApp</button>
+  </div>
+
+  <div class="glass-card" id="cardRules">
+    <h1>Mohon Baca Rules Di Bawah!</h1>
+    <pre>-----+ <span class="hl">*10 Peraturan Clan*</span> +-----
+
+1. Umur Minimal 10
+2. Boleh Tag Grub Tapi Dilarang Spam
+3. Wajib 1 Kali Lihat
+4. No Gore, Hal Hal Yang Berbau 18+, Promosi, Sider, Spam Stiker, Baperan, Rasis
+5. Sering Sering Up tt Agar Clan Terlihat Aktif
+6. Menjaga Etika Antar Clan Dan Anggota
+7. Card Name Boleh Tidak Di Pakai Di Nama Tiktok Kalian
+8. Wajib Intro Agar Kenal 1 Sama Lain
+9. Jangan Sungkan Untuk Nimbrung
+10. Berbicara Kasar Sewajarnya Saja
+
+Jika Sudah Bersedia Klik Tombol Di Bawah</pre>
+    <a class="btn wa" href="https://chat.whatsapp.com/JRWsCKVyQLVJl0osviTnL7?s=cl&p=a&ilr=0" target="_blank" rel="noopener">Saya Sudah Bersedia</a>
+  </div>
+</div>
+
+<div class="footer-fixed mono">𝟽𝚂𝚘𝚞𝚕𝚜</div>
+
+<script>
+  const cardJoin = document.getElementById('cardJoin');
+  const cardRules = document.getElementById('cardRules');
+  const btnShowRules = document.getElementById('btnShowRules');
+
+  btnShowRules.addEventListener('click', () => {
+    cardJoin.classList.add('fade-out');
+    setTimeout(() => {
+      cardJoin.style.display = 'none';
+      cardRules.style.display = 'block';
+      requestAnimationFrame(() => {
+        cardRules.style.opacity = '0';
+        cardRules.style.transform = 'scale(.97)';
+        requestAnimationFrame(() => {
+          cardRules.style.transition = 'opacity .4s ease, transform .4s ease';
+          cardRules.style.opacity = '1';
+          cardRules.style.transform = 'scale(1)';
+        });
+      });
+    }, 380);
+  });
+</script>
+
+</body>
+</html>
