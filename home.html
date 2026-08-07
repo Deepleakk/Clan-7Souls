@@ -156,7 +156,45 @@
     transform:rotate(45deg);
   }
 
-  /* content sections */
+  /* full-page loading screen */
+  #pageLoader{
+    position:fixed;inset:0;z-index:100;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:18px;
+    background:var(--dt-navy);
+    transition:opacity .6s ease, visibility .6s ease;
+  }
+  #pageLoader.hidden{
+    opacity:0;visibility:hidden;pointer-events:none;
+  }
+  #pageLoader .loader-logo{
+    width:44px;height:44px;object-fit:cover;
+    animation:spin 8s linear infinite;
+    filter:drop-shadow(0 0 14px rgba(255,215,120,0.5));
+  }
+  #pageLoader .loader-spinner{
+    width:28px;height:28px;
+    border:3px solid rgba(255,255,255,0.15);
+    border-top-color:var(--dt-cyan);
+    border-radius:50%;
+    animation:spin-loader .8s linear infinite;
+  }
+  @keyframes spin-loader{
+    to{transform:rotate(360deg);}
+  }
+  #pageLoader .loader-text{
+    color:var(--text-dim);font-size:11px;letter-spacing:2px;
+    font-family:'JetBrains Mono',monospace;
+  }
+
+  /* pause hero animations until page finishes loading */
+  body.loading .hero h1,
+  body.loading .hero .subtitle,
+  body.loading .hero .actions,
+  body.loading .scroll-hint,
+  body.loading .star-img{
+    animation-play-state:paused !important;
+  }
   section.content{
     padding:90px 6vw;
     position:relative;
@@ -171,23 +209,70 @@
   }
   .about-box strong{color:var(--text);}
 
-  .souls-grid{
-    display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-    gap:18px;max-width:1000px;margin:0 auto;
+  .souls-track{
+    display:flex;
+    align-items:center;
+    gap:6vw;
+    overflow-x:auto;
+    padding:60px 20vw;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
   }
+  .souls-track::-webkit-scrollbar{display:none;}
   .soul-card{
-    backdrop-filter: blur(14px) saturate(140%);
-    -webkit-backdrop-filter: blur(14px) saturate(140%);
-    background: linear-gradient(160deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
-    border: 1px solid rgba(255,255,255,0.10);
-    border-radius: 14px;
-    padding:24px 22px;
-    transition:transform .2s ease, border-color .2s ease;
+    flex:0 0 auto;
+    width:70vw;
+    max-width:400px;
+    aspect-ratio: 4 / 3;
+    background: linear-gradient(160deg, rgba(255,255,255,0.09), rgba(255,255,255,0.02));
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 18px;
+    scroll-snap-align:center;
+    position:relative;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:24px;
+    will-change:transform, box-shadow;
   }
-  .soul-card:hover{transform:translateY(-3px);border-color:rgba(255,255,255,0.22);}
-  .soul-card .emoji{font-size:22px;margin-bottom:10px;}
-  .soul-card h3{font-size:15.5px;font-weight:600;margin-bottom:8px;}
-  .soul-card p{color:var(--text-dim);font-size:13.5px;line-height:1.65;}
+  .soul-card .emoji{font-size:30px;margin-bottom:12px;}
+  .soul-card h3{font-size:18px;font-weight:700;margin-bottom:10px;}
+  .soul-card p{color:var(--text-dim);font-size:13.5px;line-height:1.65;max-width:340px;opacity:0;}
+
+  .video-section{
+    max-width:800px;margin:0 auto;
+    position:relative;
+    border-radius:20px;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,0.1);
+    background:#000;
+    aspect-ratio:16/9;
+  }
+  .video-section video{
+    width:100%;height:100%;
+    object-fit:cover;
+    display:block;
+    opacity:0;
+    transition:opacity .5s ease;
+  }
+  .video-section video.loaded{
+    opacity:1;
+  }
+  .mute-btn{
+    position:absolute;bottom:16px;right:16px;z-index:3;
+    width:42px;height:42px;border-radius:50%;
+    background:rgba(10,9,16,0.6);
+    backdrop-filter:blur(8px);
+    border:1px solid rgba(255,255,255,0.15);
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+    transition:background .2s ease, transform .2s ease;
+  }
+  .mute-btn:hover{background:rgba(10,9,16,0.8);transform:scale(1.06);}
+  .mute-btn svg{width:20px;height:20px;fill:var(--text);}
 
   footer.page-footer{
     padding:32px 6vw;text-align:center;color:var(--text-dim);font-size:13px;
@@ -200,7 +285,14 @@
   }
 </style>
 </head>
-<body>
+<body class="loading">
+
+<div id="pageLoader">
+  <img class="loader-logo" src="./assets/undertale-save.png" alt="loading">
+  <div class="loader-spinner"></div>
+  <span class="loader-text">MEMUAT 𝟽𝚂𝚘𝚞𝚕𝚜...</span>
+</div>
+
 <div class="bg-layer">
   <div class="stars"></div>
   <div class="nebula"></div>
@@ -245,42 +337,67 @@
       <div class="eyebrow mono">// every soul meaning</div>
       <h2>Makna Setiap Jiwa</h2>
     </div>
-    <div class="souls-grid">
-      <div class="soul-card">
+    <div class="souls-track" id="soulsTrack">
+      <div class="soul-card" data-color="94,224,224">
         <div class="emoji">🩵</div>
         <h3>Patience</h3>
         <p>Understanding that great things take time, mastering the art of staying calm in a rushing world, and trusting that waiting for the right moment is just as powerful as taking action.</p>
       </div>
-      <div class="soul-card">
+      <div class="soul-card" data-color="255,140,60">
         <div class="emoji">🧡</div>
         <h3>Bravery</h3>
         <p>Facing life's uncertainties head-on, stepping out of your comfort zone, and choosing to move forward even when fear tries to hold you back.</p>
       </div>
-      <div class="soul-card">
+      <div class="soul-card" data-color="60,110,255">
         <div class="emoji">💙</div>
         <h3>Integrity</h3>
         <p>Staying true to your core values and morals, remaining honest with yourself and others, and standing firm no matter how much the world tries to pressure you.</p>
       </div>
-      <div class="soul-card">
+      <div class="soul-card" data-color="160,90,255">
         <div class="emoji">💜</div>
         <h3>Perseverance</h3>
         <p>Having the unyielding grit to keep pushing through life's toughest chapters, never giving up when doors close, and quietly outlasting every hardship.</p>
       </div>
-      <div class="soul-card">
+      <div class="soul-card" data-color="70,220,130">
         <div class="emoji">💚</div>
         <h3>Kindness</h3>
         <p>Choosing empathy as a strength, offering genuine care to those around you, and building a warmer world through daily acts of compassion.</p>
       </div>
-      <div class="soul-card">
+      <div class="soul-card" data-color="230,200,50">
         <div class="emoji">💛</div>
         <h3>Justice</h3>
         <p>Standing up for what is right with absolute clarity, defending fairness in everyday life, and keeping an unwavering focus on truth.</p>
       </div>
-      <div class="soul-card">
+      <div class="soul-card" data-color="255,59,92">
         <div class="emoji">❤️</div>
         <h3>Determination</h3>
         <p>The ultimate driving force of the soul, the unshakeable will to chase your dreams, and the power to rise up stronger every time life knocks you down.</p>
       </div>
+    </div>
+  </section>
+
+  <section class="content" id="video">
+    <div class="section-head">
+      <div class="eyebrow mono">// 7souls in motion</div>
+      <h2>Sekilas 𝟽𝚂𝚘𝚞𝚕𝚜</h2>
+    </div>
+    <div class="video-section">
+      <video
+        id="homeVideo"
+        src="./assets/home.mp4"
+        autoplay
+        loop
+        muted
+        playsinline
+        preload="auto"
+        disablepictureinpicture
+        controlsList="nodownload noplaybackrate nofullscreen"
+        onclick="return false;"
+      ></video>
+      <button class="mute-btn" id="muteBtn" aria-label="Toggle sound">
+        <svg id="iconMuted" viewBox="0 0 24 24"><path d="M16.5 12A4.5 4.5 0 0 0 14 8v2.5l2.4 2.4c.06-.3.1-.6.1-.9zM19 12c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06a8.99 8.99 0 0 0 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+        <svg id="iconUnmuted" viewBox="0 0 24 24" style="display:none;"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1-3.29-2.5-4.03v8.05c1.5-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+      </button>
     </div>
   </section>
 </main>
@@ -288,6 +405,41 @@
 <footer class="page-footer mono">𝟽𝚂𝚘𝚞𝚕𝚜</footer>
 
 <script>
+  // ===== FULL PAGE LOADER =====
+  // nunggu semua gambar & video kepake di halaman ini fully loaded,
+  // baru sembunyiin loader dan biarin animasi hero mulai jalan
+  function waitForAssets(){
+    const images = Array.from(document.querySelectorAll('img'));
+    const videos = Array.from(document.querySelectorAll('video'));
+
+    const imgPromises = images.map(img => {
+      if (img.complete) return Promise.resolve();
+      return new Promise(resolve => {
+        img.addEventListener('load', resolve, { once:true });
+        img.addEventListener('error', resolve, { once:true }); // jangan sampai loader nyangkut kalau 1 gambar gagal
+      });
+    });
+
+    const videoPromises = videos.map(video => {
+      if (video.readyState >= 4) return Promise.resolve();
+      return new Promise(resolve => {
+        video.addEventListener('canplaythrough', resolve, { once:true });
+        video.addEventListener('error', resolve, { once:true });
+      });
+    });
+
+    return Promise.all([...imgPromises, ...videoPromises]);
+  }
+
+  const pageLoader = document.getElementById('pageLoader');
+
+  waitForAssets().then(() => {
+    pageLoader.classList.add('hidden');
+    document.body.classList.remove('loading');
+  });
+
+  // ===== END FULL PAGE LOADER =====
+
   const nav = document.getElementById('navbar');
   const scrollHint = document.querySelector('.scroll-hint');
   window.addEventListener('scroll', () => {
@@ -298,6 +450,67 @@
       nav.classList.remove('scrolled');
       scrollHint.classList.remove('hide');
     }
+  });
+
+  // soul carousel: scale + glow driven by scroll position
+  const soulsTrack = document.getElementById('soulsTrack');
+  const soulCards = document.querySelectorAll('.soul-card');
+
+  const MIN_SCALE = 0.72;
+  const MAX_SCALE = 1;
+  const RANGE = 320;
+
+  function updateSoulFocus(){
+    const trackRect = soulsTrack.getBoundingClientRect();
+    const center = trackRect.left + trackRect.width / 2;
+
+    soulCards.forEach(card => {
+      const rect = card.getBoundingClientRect();
+      const cardCenter = rect.left + rect.width / 2;
+      const distance = Math.abs(cardCenter - center);
+
+      const t = Math.min(distance / RANGE, 1);
+      const eased = 1 - Math.pow(t, 2);
+
+      const scale = MIN_SCALE + (MAX_SCALE - MIN_SCALE) * eased;
+      card.style.transform = `scale(${scale})`;
+      card.style.zIndex = Math.round(eased * 100);
+
+      const color = card.dataset.color;
+      const glowStrength = 4 + eased * 30;
+      const glowOpacity = eased * 0.6;
+      card.style.boxShadow = `0 0 ${glowStrength}px rgba(${color},${glowOpacity})`;
+      card.style.borderColor = `rgba(${color},${0.1 + eased * 0.45})`;
+
+      const desc = card.querySelector('p');
+      if (desc) desc.style.opacity = eased;
+    });
+  }
+
+  soulsTrack.addEventListener('scroll', updateSoulFocus, { passive: true });
+  window.addEventListener('resize', updateSoulFocus);
+  window.addEventListener('load', updateSoulFocus);
+
+  // video: udah pasti loaded duluan karena ditunggu page loader, tinggal fade-in
+  const homeVideo = document.getElementById('homeVideo');
+  homeVideo.classList.add('loaded');
+
+  // mute / unmute toggle, video tetap autoplay-loop, ga bisa di-pause
+  const muteBtn = document.getElementById('muteBtn');
+  const iconMuted = document.getElementById('iconMuted');
+  const iconUnmuted = document.getElementById('iconUnmuted');
+
+  muteBtn.addEventListener('click', () => {
+    homeVideo.muted = !homeVideo.muted;
+    iconMuted.style.display = homeVideo.muted ? 'block' : 'none';
+    iconUnmuted.style.display = homeVideo.muted ? 'none' : 'block';
+    // pastikan tetap play meski browser sempat pause pas toggle
+    if (homeVideo.paused) homeVideo.play();
+  });
+
+  // jaga-jaga: kalau somehow ke-pause (misal user coba klik video), langsung play lagi
+  homeVideo.addEventListener('pause', () => {
+    homeVideo.play();
   });
 </script>
 
