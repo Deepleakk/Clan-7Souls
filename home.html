@@ -229,18 +229,42 @@
     border-radius: 18px;
     scroll-snap-align:center;
     position:relative;
-    overflow:hidden;
+    overflow-y:auto;
+    overflow-x:hidden;
     display:flex;
     flex-direction:column;
     align-items:center;
     justify-content:center;
     text-align:center;
-    padding:24px;
+    padding:20px 22px;
     will-change:transform, box-shadow;
   }
-  .soul-card .emoji{font-size:30px;margin-bottom:12px;}
-  .soul-card h3{font-size:18px;font-weight:700;margin-bottom:10px;}
-  .soul-card p{color:var(--text-dim);font-size:13.5px;line-height:1.65;max-width:340px;opacity:0;}
+  .soul-card::-webkit-scrollbar{width:4px;}
+  .soul-card::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.15);border-radius:4px;}
+  .soul-card .emoji{font-size:26px;margin-bottom:8px;flex-shrink:0;}
+  .soul-card h3{font-size:16.5px;font-weight:700;margin-bottom:8px;flex-shrink:0;}
+  .soul-card p{color:var(--text-dim);font-size:12.5px;line-height:1.55;max-width:320px;opacity:0;}
+
+  .swipe-hint{
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    margin-top:8px;
+    color:var(--text-dim);font-size:10.5px;letter-spacing:1px;
+    font-family:'JetBrains Mono',monospace;
+  }
+  .swipe-hint .arrow-left, .swipe-hint .arrow-right{
+    display:inline-block;
+    animation:swipe-nudge 1.8s ease-in-out infinite;
+  }
+  .swipe-hint .arrow-right{animation-delay:.3s;}
+  @keyframes swipe-nudge{
+    0%,100%{transform:translateX(0);opacity:.5;}
+    50%{transform:translateX(4px);opacity:1;}
+  }
+  .swipe-hint .arrow-left{animation-name:swipe-nudge-left;}
+  @keyframes swipe-nudge-left{
+    0%,100%{transform:translateX(0);opacity:.5;}
+    50%{transform:translateX(-4px);opacity:1;}
+  }
 
   .video-section{
     max-width:800px;margin:0 auto;
@@ -374,12 +398,17 @@
         <p>The ultimate driving force of the soul, the unshakeable will to chase your dreams, and the power to rise up stronger every time life knocks you down.</p>
       </div>
     </div>
+    <div class="swipe-hint">
+      <span class="arrow-left">←</span>
+      <span>GESER UNTUK LIHAT SEMUA</span>
+      <span class="arrow-right">→</span>
+    </div>
   </section>
 
   <section class="content" id="video">
     <div class="section-head">
-      <div class="eyebrow mono">// 7souls in motion</div>
-      <h2>Sekilas 𝟽𝚂𝚘𝚞𝚕𝚜</h2>
+      <div class="eyebrow mono">// Loop Video</div>
+      <h2>Pelengkap</h2>
     </div>
     <div class="video-section">
       <video
