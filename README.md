@@ -1,1 +1,1 @@
-go to clan.the7souls.my.id
+go to clan.the7souls.my.id/home
