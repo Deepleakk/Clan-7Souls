@@ -1,1 +1,1 @@
-yes
+go to clan.the7souls.my.id
