@@ -510,7 +510,6 @@
 
 <footer class="page-footer mono">𝟽𝚂𝚘𝚞𝚕𝚜</footer>
 
-<audio id="bgmAudio" src="./assets/home.mp3" loop preload="auto"></audio>
 
 <script>
   // ===== FULL PAGE LOADER =====
@@ -681,29 +680,6 @@
       this.replaceWith(fallback);
     }, { once:true });
   });
-
-  // ===== BACKGROUND MUSIC =====
-  const bgmAudio = document.getElementById('bgmAudio');
-  let bgmStarted = false;
-
-  function startBgm(){
-    if (bgmStarted) return;
-    bgmStarted = true;
-    bgmAudio.volume = 0.5;
-    bgmAudio.play().catch(() => {
-      bgmStarted = false;
-    });
-  }
-
-  // coba langsung autoplay begitu halaman siap
-  startBgm();
-
-  // fallback: kalau browser block direct autoplay, coba lagi begitu ada interaksi apapun
-  const interactionEvents = ['scroll', 'touchstart', 'pointerdown', 'click', 'keydown'];
-  interactionEvents.forEach(evt => {
-    window.addEventListener(evt, startBgm, { passive:true });
-  });
-  // ===== END BACKGROUND MUSIC =====
 </script>
 
 </body>
