@@ -266,6 +266,49 @@
     50%{transform:translateX(-4px);opacity:1;}
   }
 
+  .clan-grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:18px;max-width:900px;margin:0 auto;
+  }
+  .clan-card{
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    background: linear-gradient(160deg, rgba(255,255,255,0.09), rgba(255,255,255,0.02));
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding:28px 20px;
+    text-align:center;
+    transition:transform .2s ease, border-color .2s ease;
+  }
+  .clan-card:hover{transform:translateY(-3px);border-color:rgba(94,224,224,0.35);}
+  .clan-card .avatar{
+    width:64px;height:64px;border-radius:50%;
+    object-fit:cover;
+    margin:0 auto 16px;
+    border:2px solid rgba(255,255,255,0.15);
+    background:rgba(255,255,255,0.05);
+  }
+  .clan-card .role{
+    font-size:11px;color:var(--dt-cyan);letter-spacing:1.5px;
+    margin-bottom:6px;font-family:'JetBrains Mono',monospace;
+  }
+  .clan-card h3{font-size:16px;font-weight:700;margin-bottom:12px;}
+  .clan-card a.tiktok-link{
+    display:inline-flex;align-items:center;gap:6px;
+    font-size:12.5px;color:var(--text-dim);text-decoration:none;
+    padding:7px 14px;border-radius:20px;
+    border:1px solid rgba(255,255,255,0.12);
+    transition:border-color .2s ease, color .2s ease;
+  }
+  .clan-card a.tiktok-link:hover{
+    border-color:var(--soul-red);color:var(--text);
+  }
+  .clan-note{
+    text-align:center;margin-top:40px;
+    color:var(--text-dim);font-size:14.5px;
+  }
+  .clan-note strong{color:var(--text);}
+
   .video-section{
     max-width:800px;margin:0 auto;
     position:relative;
@@ -285,18 +328,7 @@
   .video-section video.loaded{
     opacity:1;
   }
-  .mute-btn{
-    position:absolute;bottom:16px;right:16px;z-index:3;
-    width:42px;height:42px;border-radius:50%;
-    background:rgba(10,9,16,0.6);
-    backdrop-filter:blur(8px);
-    border:1px solid rgba(255,255,255,0.15);
-    display:flex;align-items:center;justify-content:center;
-    cursor:pointer;
-    transition:background .2s ease, transform .2s ease;
-  }
-  .mute-btn:hover{background:rgba(10,9,16,0.8);transform:scale(1.06);}
-  .mute-btn svg{width:20px;height:20px;fill:var(--text);}
+
 
   footer.page-footer{
     padding:32px 6vw;text-align:center;color:var(--text-dim);font-size:13px;
@@ -362,6 +394,13 @@
       <h2>Makna Setiap Jiwa</h2>
     </div>
     <div class="souls-track" id="soulsTrack">
+      <!-- clone terakhir di depan, buat efek infinite loop pas geser ke kiri dari Patience -->
+      <div class="soul-card" data-color="255,59,92" data-clone="true">
+        <div class="emoji">❤️</div>
+        <h3>Determination</h3>
+        <p>The ultimate driving force of the soul, the unshakeable will to chase your dreams, and the power to rise up stronger every time life knocks you down.</p>
+      </div>
+
       <div class="soul-card" data-color="94,224,224">
         <div class="emoji">🩵</div>
         <h3>Patience</h3>
@@ -397,11 +436,54 @@
         <h3>Determination</h3>
         <p>The ultimate driving force of the soul, the unshakeable will to chase your dreams, and the power to rise up stronger every time life knocks you down.</p>
       </div>
+
+      <!-- clone pertama di belakang, buat efek infinite loop pas geser ke kanan dari Determination -->
+      <div class="soul-card" data-color="94,224,224" data-clone="true">
+        <div class="emoji">🩵</div>
+        <h3>Patience</h3>
+        <p>Understanding that great things take time, mastering the art of staying calm in a rushing world, and trusting that waiting for the right moment is just as powerful as taking action.</p>
+      </div>
     </div>
     <div class="swipe-hint">
       <span class="arrow-left">←</span>
       <span>GESER UNTUK LIHAT SEMUA</span>
       <span class="arrow-right">→</span>
+    </div>
+  </section>
+
+  <section class="content" id="structure">
+    <div class="section-head">
+      <div class="eyebrow mono">// clan structure</div>
+      <h2>Struktur Clan</h2>
+    </div>
+    <div class="clan-grid">
+      <div class="clan-card">
+        <img class="avatar" data-avatar="https://tiktok.com/@repl.sh" src="https://p16-sign-va.tiktokcdn.com/placeholder-faiz.jpg" alt="Faiz Jir">
+        <div class="role">OWNER</div>
+        <h3>Faiz Jir</h3>
+        <a class="tiktok-link" href="https://tiktok.com/@repl.sh" target="_blank" rel="noopener">@repl.sh</a>
+      </div>
+      <div class="clan-card">
+        <img class="avatar" data-avatar="https://tiktok.com/@denjii_645" src="https://p16-sign-va.tiktokcdn.com/placeholder-den.jpg" alt="Den">
+        <div class="role">CO-OWNER</div>
+        <h3>Den.</h3>
+        <a class="tiktok-link" href="https://tiktok.com/@denjii_645" target="_blank" rel="noopener">@denjii_645</a>
+      </div>
+      <div class="clan-card">
+        <img class="avatar" data-avatar="https://tiktok.com/@awanlusi" src="https://p16-sign-va.tiktokcdn.com/placeholder-awan.jpg" alt="Awan">
+        <div class="role">ADMIN</div>
+        <h3>Awan</h3>
+        <a class="tiktok-link" href="https://tiktok.com/@awanlusi" target="_blank" rel="noopener">@awanlusi</a>
+      </div>
+      <div class="clan-card">
+        <img class="avatar" data-avatar="https://tiktok.com/@0xmikhail" src="https://p16-sign-va.tiktokcdn.com/placeholder-mikhail.jpg" alt="Mikhail Karbit Bgmt Wok">
+        <div class="role">ADMIN</div>
+        <h3>Mikhail Karbit Bgmt Wok</h3>
+        <a class="tiktok-link" href="https://tiktok.com/@0xmikhail" target="_blank" rel="noopener">@0xmikhail</a>
+      </div>
+    </div>
+    <div class="clan-note">
+      Dan Juga Seluruh Member <strong>𝟽𝚂𝚘𝚞𝚕𝚜</strong>
     </div>
   </section>
 
@@ -423,15 +505,13 @@
         controlsList="nodownload noplaybackrate nofullscreen"
         onclick="return false;"
       ></video>
-      <button class="mute-btn" id="muteBtn" aria-label="Toggle sound">
-        <svg id="iconMuted" viewBox="0 0 24 24"><path d="M16.5 12A4.5 4.5 0 0 0 14 8v2.5l2.4 2.4c.06-.3.1-.6.1-.9zM19 12c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06a8.99 8.99 0 0 0 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
-        <svg id="iconUnmuted" viewBox="0 0 24 24" style="display:none;"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1-3.29-2.5-4.03v8.05c1.5-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
-      </button>
     </div>
   </section>
 </main>
 
 <footer class="page-footer mono">𝟽𝚂𝚘𝚞𝚕𝚜</footer>
+
+<audio id="bgmAudio" src="./assets/home.mp3" loop preload="auto"></audio>
 
 <script>
   // ===== FULL PAGE LOADER =====
@@ -460,87 +540,50 @@
     return Promise.all([...imgPromises, ...videoPromises]);
   }
 
-  const pageLoader = document.getElementById('pageLoader');
-
-  waitForAssets().then(() => {
-    pageLoader.classList.add('hidden');
-    document.body.classList.remove('loading');
-  });
-
-  // ===== END FULL PAGE LOADER =====
-
-  const nav = document.getElementById('navbar');
-  const scrollHint = document.querySelector('.scroll-hint');
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 40) {
-      nav.classList.add('scrolled');
-      scrollHint.classList.add('hide');
-    } else {
-      nav.classList.remove('scrolled');
-      scrollHint.classList.remove('hide');
-    }
-  });
-
-  // soul carousel: scale + glow driven by scroll position
-  const soulsTrack = document.getElementById('soulsTrack');
-  const soulCards = document.querySelectorAll('.soul-card');
-
-  const MIN_SCALE = 0.72;
-  const MAX_SCALE = 1;
-  const RANGE = 320;
-
-  function updateSoulFocus(){
-    const trackRect = soulsTrack.getBoundingClientRect();
-    const center = trackRect.left + trackRect.width / 2;
-
-    soulCards.forEach(card => {
-      const rect = card.getBoundingClientRect();
-      const cardCenter = rect.left + rect.width / 2;
-      const distance = Math.abs(cardCenter - center);
-
-      const t = Math.min(distance / RANGE, 1);
-      const eased = 1 - Math.pow(t, 2);
-
-      const scale = MIN_SCALE + (MAX_SCALE - MIN_SCALE) * eased;
-      card.style.transform = `scale(${scale})`;
-      card.style.zIndex = Math.round(eased * 100);
-
-      const color = card.dataset.color;
-      const glowStrength = 4 + eased * 30;
-      const glowOpacity = eased * 0.6;
-      card.style.boxShadow = `0 0 ${glowStrength}px rgba(${color},${glowOpacity})`;
-      card.style.borderColor = `rgba(${color},${0.1 + eased * 0.45})`;
-
-      const desc = card.querySelector('p');
-      if (desc) desc.style.opacity = eased;
-    });
-  }
-
-  soulsTrack.addEventListener('scroll', updateSoulFocus, { passive: true });
-  window.addEventListener('resize', updateSoulFocus);
-  window.addEventListener('load', updateSoulFocus);
-
-  // video: udah pasti loaded duluan karena ditunggu page loader, tinggal fade-in
-  const homeVideo = document.getElementById('homeVideo');
+  const pageLoader = document.getElementById('homeVideo');
   homeVideo.classList.add('loaded');
+  homeVideo.muted = true;
 
-  // mute / unmute toggle, video tetap autoplay-loop, ga bisa di-pause
-  const muteBtn = document.getElementById('muteBtn');
-  const iconMuted = document.getElementById('iconMuted');
-  const iconUnmuted = document.getElementById('iconUnmuted');
-
-  muteBtn.addEventListener('click', () => {
-    homeVideo.muted = !homeVideo.muted;
-    iconMuted.style.display = homeVideo.muted ? 'block' : 'none';
-    iconUnmuted.style.display = homeVideo.muted ? 'none' : 'block';
-    // pastikan tetap play meski browser sempat pause pas toggle
-    if (homeVideo.paused) homeVideo.play();
-  });
-
-  // jaga-jaga: kalau somehow ke-pause (misal user coba klik video), langsung play lagi
+  // jaga-jaga: kalau somehow ke-pause, langsung play lagi (tetap loop tanpa suara)
   homeVideo.addEventListener('pause', () => {
     homeVideo.play();
   });
+
+  // avatar fallback: kalau src gambar gagal load (misal link TikTok expired), tampilin inisial
+  document.querySelectorAll('.clan-card .avatar').forEach(img => {
+    img.addEventListener('error', function(){
+      const name = this.alt || '?';
+      const initials = name.split(' ').map(w => w[0]).slice(0,2).join('').toUpperCase();
+      const fallback = document.createElement('div');
+      fallback.className = 'avatar';
+      fallback.style.display = 'flex';
+      fallback.style.alignItems = 'center';
+      fallback.style.justifyContent = 'center';
+      fallback.style.fontSize = '20px';
+      fallback.style.fontWeight = '700';
+      fallback.style.color = 'var(--dt-cyan)';
+      fallback.textContent = initials;
+      this.replaceWith(fallback);
+    }, { once:true });
+  });
+
+  // ===== BACKGROUND MUSIC =====
+  const bgmAudio = document.getElementById('bgmAudio');
+  let bgmStarted = false;
+
+  function startBgm(){
+    if (bgmStarted) return;
+    bgmStarted = true;
+    bgmAudio.volume = 0.5;
+    bgmAudio.play().catch(() => {
+      // kalau browser tetap block autoplay, coba lagi di scroll berikutnya
+      bgmStarted = false;
+    });
+  }
+
+  // nyalain musik pas scroll pertama kali (dianggap sebagai interaksi user)
+  window.addEventListener('scroll', startBgm, { passive:true });
+  // ===== END BACKGROUND MUSIC =====
 </script>
 
 </body>
