@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>7Souls | Vault</title>
+<link rel="icon" href="./assets/favicon.ico">
+<meta property="og:title" content="7Souls | Vault">
+<meta property="og:description" content="Project & Asset Resmi Clan 7Souls">
+<meta property="og:image" content="https://clan.the7souls.my.id/assets/favicon.ico">
+<meta property="og:url" content="https://clan.the7souls.my.id/vault">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --soul-red: #ff3b5c;
+    --dt-navy: #0b1730;
+    --dt-cyan: #5ee0e0;
+    --text: #eee9f7;
+    --text-dim: #a79fc2;
+    --border: rgba(255,255,255,0.08);
+    --nav-bg: rgba(10,9,16,0.55);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Space Grotesk',sans-serif;
+    color:var(--text);
+    background: radial-gradient(ellipse at 20% 20%, rgba(255,59,92,0.22), transparent 55%),
+                radial-gradient(ellipse at 80% 30%, rgba(94,224,224,0.10), transparent 50%),
+                radial-gradient(ellipse at 50% 90%, rgba(20,30,90,0.35), transparent 60%),
+                var(--dt-navy);
+    min-height:100vh;
+    overflow-x:hidden;
+    position:relative;
+  }
+  .mono{font-family:'JetBrains Mono',monospace;}
+
+  /* bg stars + nebula */
+  .bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none;}
+  .stars{
+    position:absolute;inset:0;
+    background-image:
+      radial-gradient(1.5px 1.5px at 10% 20%, rgba(255,255,255,.65), transparent),
+      radial-gradient(1.5px 1.5px at 25% 70%, rgba(255,255,255,.45), transparent),
+      radial-gradient(2px 2px at 40% 35%, rgba(94,224,224,.55), transparent),
+      radial-gradient(1.5px 1.5px at 60% 80%, rgba(255,255,255,.5), transparent),
+      radial-gradient(1.5px 1.5px at 75% 25%, rgba(255,59,92,.5), transparent),
+      radial-gradient(1.5px 1.5px at 88% 60%, rgba(255,255,255,.4), transparent),
+      radial-gradient(1.5px 1.5px at 50% 10%, rgba(255,255,255,.35), transparent),
+      radial-gradient(1.5px 1.5px at 15% 90%, rgba(255,255,255,.35), transparent),
+      radial-gradient(1.5px 1.5px at 30% 45%, rgba(255,255,255,.3), transparent),
+      radial-gradient(1.5px 1.5px at 68% 92%, rgba(94,224,224,.35), transparent);
+    animation:twinkle 4.5s ease-in-out infinite alternate;
+  }
+  @keyframes twinkle{from{opacity:.5;}to{opacity:1;}}
+  .nebula{
+    position:absolute;inset:0;
+    background:
+      radial-gradient(ellipse 40% 30% at 30% 40%, rgba(255,59,92,0.12), transparent 70%),
+      radial-gradient(ellipse 35% 25% at 70% 60%, rgba(94,224,224,0.08), transparent 70%);
+    animation:drift-neb 18s ease-in-out infinite alternate;
+  }
+  @keyframes drift-neb{
+    from{transform:translate(0,0) scale(1);}
+    to{transform:translate(-3%,2%) scale(1.05);}
+  }
+
+  /* loader */
+  #pageLoader{
+    position:fixed;inset:0;z-index:100;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:18px;background:var(--dt-navy);
+    transition:opacity .6s ease, visibility .6s ease;
+  }
+  #pageLoader.hidden{opacity:0;visibility:hidden;pointer-events:none;}
+  #pageLoader .loader-logo{
+    width:44px;height:44px;object-fit:cover;
+    animation:spin 8s linear infinite;
+    filter:drop-shadow(0 0 14px rgba(255,215,120,0.5));
+  }
+  #pageLoader .loader-spinner{
+    width:28px;height:28px;
+    border:3px solid rgba(255,255,255,0.15);
+    border-top-color:var(--dt-cyan);
+    border-radius:50%;
+    animation:spin-loader .8s linear infinite;
+  }
+  @keyframes spin-loader{to{transform:rotate(360deg);}}
+  #pageLoader .loader-text{
+    color:var(--text-dim);font-size:11px;letter-spacing:2px;
+    font-family:'JetBrains Mono',monospace;
+  }
+  @keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+
+  body.loading .hero-content{animation-play-state:paused!important;}
+
+  /* nav */
+  nav{
+    position:sticky;top:0;z-index:10;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:20px 6vw;
+    background:var(--nav-bg);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+    transition:background-color .6s ease, border-color .6s ease;
+  }
+  nav.scrolled{
+    background:rgba(11,23,48,0.65);
+    border-color:rgba(94,224,224,0.15);
+  }
+  nav .logo{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:600;text-decoration:none;color:var(--text);}
+  nav .logo img{width:28px;height:28px;object-fit:cover;border-radius:4px;}
+  nav .logo .n{color:var(--dt-cyan);}
+  nav .nav-links{display:flex;gap:24px;align-items:center;}
+  nav .nav-links a{
+    font-size:14px;color:var(--text-dim);text-decoration:none;
+    transition:color .2s;font-weight:500;
+  }
+  nav .nav-links a:hover{color:var(--text);}
+  nav .nav-links a.active{color:var(--dt-cyan);}
+
+  main{position:relative;z-index:1;}
+
+  /* hero */
+  .hero{
+    min-height:55vh;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;padding:80px 6vw 60px;
+  }
+  .hero .star-img{
+    width:48px;height:48px;object-fit:cover;margin-bottom:20px;
+    filter:drop-shadow(0 0 14px rgba(255,215,120,0.5));
+    animation:rise .8s ease forwards, spin 8s linear infinite .8s;
+    opacity:0;
+  }
+  @keyframes rise{to{opacity:1;transform:translateY(0);}
+    from{opacity:0;transform:translateY(16px);}
+  }
+  .hero h1{
+    font-size:clamp(26px,5vw,48px);font-weight:700;letter-spacing:-0.5px;
+    opacity:0;transform:translateY(16px);
+    animation:rise .8s ease forwards .15s;
+  }
+  .hero .eyebrow{
+    font-size:12px;color:var(--dt-cyan);letter-spacing:2px;margin-bottom:14px;
+    opacity:0;animation:rise .8s ease forwards 0s;
+  }
+  .hero .subtitle{
+    max-width:480px;margin:16px auto 0;color:var(--text-dim);
+    font-size:15px;line-height:1.75;
+    opacity:0;transform:translateY(16px);
+    animation:rise .8s ease forwards .3s;
+  }
+
+  /* filter bar */
+  .filter-wrap{
+    position:relative;z-index:1;
+    display:flex;justify-content:center;flex-wrap:wrap;gap:10px;
+    padding:0 6vw 40px;
+    opacity:0;animation:rise .8s ease forwards .45s;
+  }
+  .filter-btn{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;letter-spacing:1px;
+    padding:8px 18px;border-radius:20px;
+    border:1px solid var(--border);
+    background:transparent;color:var(--text-dim);
+    cursor:pointer;transition:all .2s;
+  }
+  .filter-btn:hover{border-color:rgba(255,255,255,0.25);color:var(--text);}
+  .filter-btn.active{
+    background:rgba(94,224,224,0.12);
+    border-color:rgba(94,224,224,0.4);
+    color:var(--dt-cyan);
+  }
+
+  /* section */
+  .content{padding:0 6vw 100px;position:relative;z-index:1;}
+  .section-head{max-width:640px;margin:0 auto 36px;text-align:center;}
+  .section-head .eyebrow{font-size:12px;color:var(--dt-cyan);letter-spacing:2px;margin-bottom:10px;}
+  .section-head h2{font-size:clamp(20px,3vw,28px);font-weight:700;}
+
+  /* grid */
+  .projects-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+    gap:20px;
+    max-width:1060px;
+    margin:0 auto;
+  }
+
+  /* card */
+  .proj-card{
+    backdrop-filter:blur(14px) saturate(140%);
+    -webkit-backdrop-filter:blur(14px) saturate(140%);
+    background:linear-gradient(160deg, rgba(255,255,255,0.09), rgba(255,255,255,0.02));
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:16px;
+    overflow:hidden;
+    display:flex;flex-direction:column;
+    transition:transform .2s ease, border-color .2s ease;
+    position:relative;
+  }
+  .proj-card:hover{transform:translateY(-4px);border-color:rgba(94,224,224,0.3);}
+  .proj-card.hidden{display:none;}
+
+  /* badge */
+  .proj-badge{
+    position:absolute;top:12px;left:12px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:10px;letter-spacing:1px;
+    padding:4px 10px;border-radius:20px;
+    font-weight:500;text-transform:uppercase;
+    backdrop-filter:blur(8px);
+    z-index:2;
+  }
+  .proj-badge.watermark{background:rgba(94,224,224,0.15);color:var(--dt-cyan);border:1px solid rgba(94,224,224,0.3);}
+  .proj-badge.cc{background:rgba(255,140,60,0.15);color:#ff9944;border:1px solid rgba(255,140,60,0.3);}
+  .proj-badge.cg{background:rgba(160,90,255,0.15);color:#b06aff;border:1px solid rgba(160,90,255,0.3);}
+  .proj-badge.hastag{background:rgba(70,220,130,0.15);color:#44e088;border:1px solid rgba(70,220,130,0.3);}
+  .proj-badge.other{background:rgba(255,255,255,0.08);color:var(--text-dim);border:1px solid var(--border);}
+
+  /* thumbnail */
+  .proj-thumb{
+    width:100%;aspect-ratio:16/9;object-fit:cover;display:block;
+    background:rgba(255,255,255,0.04);
+  }
+  .proj-thumb-placeholder{
+    width:100%;aspect-ratio:16/9;
+    background:linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+    display:flex;align-items:center;justify-content:center;
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;letter-spacing:2px;color:rgba(255,255,255,0.15);
+  }
+
+  .proj-body{
+    padding:18px 18px 12px;flex:1;display:flex;flex-direction:column;gap:8px;
+  }
+  .proj-name{font-size:15px;font-weight:600;line-height:1.4;}
+  .proj-desc{font-size:13px;color:var(--text-dim);line-height:1.65;flex:1;}
+  .proj-meta{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;color:rgba(255,255,255,0.25);letter-spacing:.5px;
+    margin-top:4px;
+  }
+
+  .proj-actions{
+    display:flex;gap:8px;padding:12px 18px 18px;
+  }
+  .proj-btn{
+    flex:1;padding:9px 12px;border-radius:8px;
+    font-size:13px;font-weight:600;
+    text-align:center;text-decoration:none;display:block;
+    cursor:pointer;transition:all .2s;border:none;
+    font-family:'Space Grotesk',sans-serif;
+  }
+  .proj-btn.dl{
+    background:rgba(255,59,92,0.15);color:var(--soul-red);
+    border:1px solid rgba(255,59,92,0.3);
+  }
+  .proj-btn.dl:hover{background:rgba(255,59,92,0.28);box-shadow:0 0 18px rgba(255,59,92,0.25);}
+  .proj-btn.copy{
+    background:rgba(94,224,224,0.1);color:var(--dt-cyan);
+    border:1px solid rgba(94,224,224,0.25);
+  }
+  .proj-btn.copy:hover{background:rgba(94,224,224,0.2);box-shadow:0 0 18px rgba(94,224,224,0.2);}
+  .proj-btn.copied{
+    background:rgba(255,255,255,0.06);color:var(--text-dim);
+    border:1px solid var(--border);
+  }
+
+  /* empty state */
+  .empty-state{
+    display:none;text-align:center;padding:80px 20px;
+    grid-column:1/-1;
+  }
+  .empty-state.show{display:block;}
+  .empty-state p{color:var(--text-dim);font-size:14px;margin-top:12px;}
+  .empty-state .icon{font-size:36px;opacity:.35;margin-bottom:8px;}
+
+  /* footer */
+  footer.page-footer{
+    padding:32px 6vw;text-align:center;color:var(--text-dim);font-size:13px;
+    border-top:1px solid var(--border);position:relative;z-index:1;
+  }
+
+  @media(max-width:640px){
+    .hero{padding:60px 6vw 40px;}
+    .projects-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body class="loading">
+
+<div id="pageLoader">
+  <img class="loader-logo" src="./assets/undertale-save.png" alt="loading">
+  <div class="loader-spinner"></div>
+  <span class="loader-text">MEMUAT 𝟽𝚂𝚘𝚞𝚕𝚜...</span>
+</div>
+
+<div class="bg-layer">
+  <div class="stars"></div>
+  <div class="nebula"></div>
+</div>
+
+<nav id="navbar">
+  <a href="./home" class="logo">
+    <img src="./assets/deltarune-save.png" alt="7Souls">
+    <span><span class="n">7</span>Souls</span>
+  </a>
+  <div class="nav-links">
+    <a href="./home">Home</a>
+    <a href="./join">Join</a>
+    <a href="./vault" class="active">Vault</a>
+  </div>
+</nav>
+
+<main>
+  <section class="hero">
+    <div class="eyebrow mono">// 7souls.vault</div>
+    <img class="star-img" src="./assets/undertale-save.png" alt="star">
+    <h1>Project <span style="color:var(--dt-cyan)">𝟽𝚂𝚘𝚞𝚕𝚜</span></h1>
+    <p class="subtitle">
+      Semua asset &amp; project clan tersedia gratis buat seluruh member.
+    </p>
+  </section>
+
+  <!-- FILTER -->
+  <div class="filter-wrap">
+    <button class="filter-btn active" data-filter="all">Semua</button>
+    <button class="filter-btn" data-filter="watermark">Watermark</button>
+    <button class="filter-btn" data-filter="cc">CC</button>
+    <button class="filter-btn" data-filter="cg">CG</button>
+    <button class="filter-btn" data-filter="hastag">Hastag</button>
+    <button class="filter-btn" data-filter="other">Lainnya</button>
+  </div>
+
+  <!-- PROJECTS -->
+  <section class="content">
+    <div class="section-head">
+      <div class="eyebrow mono" id="sectionLabel">// semua project</div>
+      <h2>Asset Clan</h2>
+    </div>
+
+    <div class="projects-grid" id="projectsGrid">
+
+      <!--
+      ╔════════════════════════════════════════════════════════╗
+      ║  CARA NAMBAH PROJECT — COPY PASTE SALAH SATU CONTOH   ║
+      ║                                                        ║
+      ║  data-cat  → watermark / cc / cg / hastag / other     ║
+      ║  proj-badge class → sesuai kategori                   ║
+      ║  proj-thumb src   → path file thumbnail/gif/img       ║
+      ║  href dl          → link download langsung            ║
+      ║  data-link        → link yang di-copy                 ║
+      ╚════════════════════════════════════════════════════════╝
+
+      CONTOH DENGAN THUMBNAIL GAMBAR:
+      <div class="proj-card" data-cat="watermark">
+        <span class="proj-badge watermark">Watermark</span>
+        <img class="proj-thumb" src="./assets/vault/wm-preview.gif" alt="Watermark">
+        <div class="proj-body">
+          <p class="proj-name">Watermark Animasi V1</p>
+          <p class="proj-desc">Watermark animasi resmi clan 7Souls. Format GIF, background transparan.</p>
+          <p class="proj-meta">2025 · by Faiz</p>
+        </div>
+        <div class="proj-actions">
+          <a class="proj-btn dl" href="./assets/vault/watermark-v1.gif" download>Download</a>
+          <button class="proj-btn copy" data-link="https://clan.the7souls.my.id/assets/vault/watermark-v1.gif">Copy Link</button>
+        </div>
+      </div>
+      -->
+
+      <div class="proj-card" data-cat="watermark">
+        <span class="proj-badge watermark">Watermark</span>
+        <video class="proj-thumb" src="./assets/preview-wm-v1.mp4" autoplay loop muted playsinline></video>
+        <div class="proj-body">
+          <p class="proj-name">Watermark Clan V1</p>
+          <p class="proj-desc">Watermark animasi resmi clan 7Souls. Buka di Alight Motion untuk dipakai di video.</p>
+          <p class="proj-meta">2025 · 7Souls</p>
+        </div>
+        <div class="proj-actions">
+          <a class="proj-btn dl" href="https://alightcreative.com/am/share/u/TMhMn7vJYJfXJ6kSM62mJXWuOT23/p/HxWglhdqCz-2372e20ab9c1626b" target="_blank" rel="noopener">Buka di AM</a>
+          <button class="proj-btn copy" data-link="https://alightcreative.com/am/share/u/TMhMn7vJYJfXJ6kSM62mJXWuOT23/p/HxWglhdqCz-2372e20ab9c1626b">Copy Link</button>
+        </div>
+      </div>
+
+      <div class="proj-card" data-cat="cc">
+        <span class="proj-badge cc">CC</span>
+        <div class="proj-thumb-placeholder">PREVIEW</div>
+        <div class="proj-body">
+          <p class="proj-name">CC Pack V1</p>
+          <p class="proj-desc">Color correction pack buat video member 7Souls. Kompatibel dengan CapCut & Alight Motion.</p>
+          <p class="proj-meta">2025 · 7Souls</p>
+        </div>
+        <div class="proj-actions">
+          <a class="proj-btn dl" href="#" download>Download</a>
+          <button class="proj-btn copy" data-link="https://clan.the7souls.my.id/vault">Copy Link</button>
+        </div>
+      </div>
+
+      <div class="proj-card" data-cat="cg">
+        <span class="proj-badge cg">CG</span>
+        <div class="proj-thumb-placeholder">PREVIEW</div>
+        <div class="proj-body">
+          <p class="proj-name">CG Pack V1</p>
+          <p class="proj-desc">Color grading pack resmi 7Souls buat konten member.</p>
+          <p class="proj-meta">2025 · 7Souls</p>
+        </div>
+        <div class="proj-actions">
+          <a class="proj-btn dl" href="#" download>Download</a>
+          <button class="proj-btn copy" data-link="https://clan.the7souls.my.id/vault">Copy Link</button>
+        </div>
+      </div>
+
+      <div class="proj-card" data-cat="hastag">
+        <span class="proj-badge hastag">Hastag</span>
+        <div class="proj-thumb-placeholder">PREVIEW</div>
+        <div class="proj-body">
+          <p class="proj-name">Pack Hastag Resmi</p>
+          <p class="proj-desc">Kumpulan hastag resmi 7Souls buat konten TikTok member.</p>
+          <p class="proj-meta">2025 · 7Souls</p>
+        </div>
+        <div class="proj-actions">
+          <a class="proj-btn dl" href="#" download>Download</a>
+          <button class="proj-btn copy" data-link="https://clan.the7souls.my.id/vault">Copy Link</button>
+        </div>
+      </div>
+
+      <div class="empty-state" id="emptyState">
+        <div class="icon">🔍</div>
+        <p>Belum ada project di kategori ini.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="page-footer mono">𝟽𝚂𝚘𝚞𝚕𝚜</footer>
+
+<script>
+  // loader
+  function waitForAssets(){
+    const images = Array.from(document.querySelectorAll('img'));
+    const imgPromises = images.map(img => {
+      if (img.complete) return Promise.resolve();
+      return new Promise(resolve => {
+        img.addEventListener('load', resolve, {once:true});
+        img.addEventListener('error', resolve, {once:true});
+      });
+    });
+    return Promise.all(imgPromises);
+  }
+
+  const pageLoader = document.getElementById('pageLoader');
+  let loaderHidden = false;
+  function hidePageLoader(){
+    if (loaderHidden) return;
+    loaderHidden = true;
+    pageLoader.classList.add('hidden');
+    document.body.classList.remove('loading');
+  }
+  waitForAssets().then(hidePageLoader);
+  setTimeout(hidePageLoader, 6000);
+
+  // nav scroll
+  const nav = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // filter
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const cards = document.querySelectorAll('.proj-card');
+  const emptyState = document.getElementById('emptyState');
+  const sectionLabel = document.getElementById('sectionLabel');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      let visible = 0;
+      cards.forEach(card => {
+        const show = filter === 'all' || card.dataset.cat === filter;
+        card.classList.toggle('hidden', !show);
+        if (show) visible++;
+      });
+      emptyState.classList.toggle('show', visible === 0);
+      sectionLabel.textContent = filter === 'all' ? '// semua project' : `// ${filter}`;
+    });
+  });
+
+  // copy link
+  document.querySelectorAll('.proj-btn.copy').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const link = btn.dataset.link;
+      const orig = btn.textContent;
+      const copy = text => {
+        btn.textContent = 'Tersalin!';
+        btn.classList.replace('copy','copied');
+        setTimeout(() => {
+          btn.textContent = orig;
+          btn.classList.replace('copied','copy');
+        }, 2000);
+      };
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(link).then(copy).catch(() => {
+          const ta = document.createElement('textarea');
+          ta.value = link; document.body.appendChild(ta);
+          ta.select(); document.execCommand('copy'); ta.remove(); copy();
+        });
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = link; document.body.appendChild(ta);
+        ta.select(); document.execCommand('copy'); ta.remove(); copy();
+      }
+    });
+  });
+</script>
+</body>
+</html>
